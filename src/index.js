@@ -55,6 +55,7 @@ import testUploadRouter from "./routes/testUploadRoute.js";
 import projectRoutes from "./routes/Placements/ProjectRoutes.js";
 import feedbackRoutes from "./routes/Feedback/feedbackRoutes.js";
 import ComplaintRoutes from "./routes/Complain/ComplaintRoutes.js";
+import MentorFeedbackRoutes from "./routes/FeedbackForm/MentorFeedback/MentorFeedbackRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -154,8 +155,9 @@ app.use("/api/internship", internshipRoutes);
 app.use("/api/v1/upload", uploadRouter);
 app.use("/api/test", testUploadRouter);
 
-app.use("/api/feedback",feedbackRoutes);
+app.use("/api/feedback", feedbackRoutes);
 app.use("/api/complaint", ComplaintRoutes);
+app.use("/api/mentor-feedback", MentorFeedbackRoutes);
 
 // Serve the test HTML file
 app.get('/test-upload', (req, res) => {
