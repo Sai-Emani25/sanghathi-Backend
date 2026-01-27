@@ -56,6 +56,7 @@ import projectRoutes from "./routes/Placements/ProjectRoutes.js";
 import feedbackRoutes from "./routes/Feedback/feedbackRoutes.js";
 import ComplaintRoutes from "./routes/Complain/ComplaintRoutes.js";
 import MentorFeedbackRoutes from "./routes/FeedbackForm/MentorFeedback/MentorFeedbackRoutes.js";
+import globalSettingsRouter from "./routes/globalSettingsRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -70,6 +71,7 @@ app.set('trust proxy', 1);
 app.use(
   cors({
     origin: [
+      "http://localhost:5173",
       "http://localhost:3000",
       "https://sanghathi.com",
     ],
@@ -155,14 +157,14 @@ app.use("/api/internship", internshipRoutes);
 app.use("/api/v1/upload", uploadRouter);
 app.use("/api/test", testUploadRouter);
 
-app.use("/api/feedback", feedbackRoutes);
 app.use("/api/complaint", ComplaintRoutes);
 app.use("/api/mentor-feedback", MentorFeedbackRoutes);
+app.use("/api/global-settings", globalSettingsRouter);
 
 // Serve the test HTML file
 app.get('/test-upload', (req, res) => {
   const testHtmlPath = path.join(__dirname, '..', 'test-upload.html');
-  
+
   if (fs.existsSync(testHtmlPath)) {
     res.sendFile(testHtmlPath);
   } else {

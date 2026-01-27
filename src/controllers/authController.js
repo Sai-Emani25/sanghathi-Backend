@@ -180,7 +180,18 @@ export const protect = catchAsync(async (req, res, next) => {
 // Restrict to specific roles
 export const restrictTo = (...roles) => {
   return (req, res, next) => {
-    if (!roles.includes(req.user.role.name)) {
+    // Check both role.name (if populated) and roleName (direct field)
+    const userRole = req.user.role?.name || req.user.roleName;
+    
+    if (!userRole) {
+      return next(
+        new AppError("User role not found. Please contact administrator.", 403)
+      );
+    }
+    
+    const normalizedRoles = roles.map(role => role.toLowerCase());
+    
+    if (!normalizedRoles.includes(userRole.toLowerCase())) {
       return next(
         new AppError("You do not have permission to perform this action", 403)
       );
