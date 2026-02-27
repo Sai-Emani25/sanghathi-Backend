@@ -57,6 +57,7 @@ import feedbackRoutes from "./routes/Feedback/feedbackRoutes.js";
 import ComplaintRoutes from "./routes/Complain/ComplaintRoutes.js";
 import MentorFeedbackRoutes from "./routes/FeedbackForm/MentorFeedback/MentorFeedbackRoutes.js";
 import globalSettingsRouter from "./routes/globalSettingsRoutes.js";
+import vtuResultsRoutes from "./routes/vtuResultsRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -160,6 +161,7 @@ app.use("/api/test", testUploadRouter);
 app.use("/api/complaint", ComplaintRoutes);
 app.use("/api/mentor-feedback", MentorFeedbackRoutes);
 app.use("/api/global-settings", globalSettingsRouter);
+app.use("/api/vtu-results", vtuResultsRoutes);
 
 // Serve the test HTML file
 app.get('/test-upload', (req, res) => {
