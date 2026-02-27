@@ -112,8 +112,11 @@ export const addVTUResults = catchAsync(async (req, res, next) => {
     vtuResults.semesters = semesterData;
     vtuResults.fetchedFrom = "manual";
     vtuResults.lastUpdated = new Date();
-    await vtuResults.save();
   }
+
+  // Calculate CGPA for all semesters
+  calculateCGPA(vtuResults);
+  await vtuResults.save();
 
   res.status(201).json({
     status: "success",
@@ -174,6 +177,9 @@ export const updateSemesterResults = catchAsync(async (req, res, next) => {
   }
 
   vtuResults.lastUpdated = new Date();
+  
+  // Recalculate CGPA after updating semester
+  calculateCGPA(vtuResults);
   await vtuResults.save();
 
   res.status(200).json({
@@ -364,4 +370,30 @@ function calculateSGPA(semester) {
   });
 
   semester.sgpa = totalCredits > 0 ? totalGradePoints / totalCredits : 0;
+}
+
+/**
+ * Helper function to calculate CGPA from all semesters
+ */
+function calculateCGPA(vtuResults) {
+  if (!vtuResults.semesters || vtuResults.semesters.length === 0) {
+    vtuResults.cgpa = 0;
+    return;
+  }
+
+  let totalGradePoints = 0;
+  let totalCredits = 0;
+
+  vtuResults.semesters.forEach((semester) => {
+    if (semester.courses && semester.courses.length > 0) {
+      semester.courses.forEach((course) => {
+        if (course.gradePoint !== undefined && course.credits) {
+          totalGradePoints += course.gradePoint * course.credits;
+          totalCredits += course.credits;
+        }
+      });
+    }
+  });
+
+  vtuResults.cgpa = totalCredits > 0 ? totalGradePoints / totalCredits : 0;
 }
