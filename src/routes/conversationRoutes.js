@@ -29,35 +29,6 @@ router.get("/check", async (req, res) => {
     res.status(500).json({ message: "Failed to check conversation count" });
   }
 });
-// ✅ Check mentor-mentee conversation count per semester
-router.get("/check", async (req, res) => {
- try {
-   const {
-     mentorId,
-     menteeId,
-     semester,
-     academicYear,
-     moocChecked,
-     projectChecked,
-     conversationText,
-     title,
-     topic,
-   } = req.body;
-   const count = await Conversation.countDocuments({
-     mentorId,
-     menteeId,
-     semester: Number(semester),
-     academicYear,
-     isOffline: true,
-   });
-
-
-   res.json({ count });
- } catch (err) {
-   res.status(500).json({ message: "Failed to check conversation count" });
- }
-});
->>>>>>> pr-36
 // ✅ Get all conversations
 router.get("/", async (req, res) => {
  try {
