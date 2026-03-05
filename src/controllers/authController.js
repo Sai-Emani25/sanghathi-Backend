@@ -201,11 +201,9 @@ export const forgotPassword = catchAsync(async (req, res, next) => {
   const resetToken = user.createPasswordResetToken();
   await user.save({ validateBeforeSave: false });
 
-  // CHANGE THIS: Point to your React frontend, not the API
-const resetURL = `${process.env.CLIENT_HOST}/resetPassword/${resetToken}`;
-  
-  // For production, use environment variables
-  // const resetURL = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+
+  // Use consistent frontend reset password route
+  const resetURL = `${process.env.CLIENT_HOST}/reset-password/${resetToken}`;
 
   const message = `Forgot your password? Click the link below to reset it:\n\n${resetURL}\n\nIf you didn't forget your password, please ignore this email.`;
 
