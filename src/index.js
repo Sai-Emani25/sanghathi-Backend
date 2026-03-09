@@ -1,3 +1,6 @@
+
+
+
 import express, { json } from "express";
 import morgan from "morgan";
 import rateLimit from "express-rate-limit";
@@ -64,13 +67,20 @@ const app = express();
 // Trust proxy - Add this before other middleware
 app.set('trust proxy', 1);
 
+// Register global settings route after app is initialized
+import globalSettingsRouter from "./routes/globalSettings.js";
+app.use("/api/global-settings", globalSettingsRouter);
+
 //1) GLOBAL MIDDLEWARE
-// Configure CORS to allow requests from any origin during development
+// Configure CORS to allow requests from local dev and deployed frontend
 app.use(
   cors({
     origin: [
       "http://localhost:3000",
+      "http://localhost:3001",
       "https://sanghathi.com",
+      "https://e-mithru-frontend.netlify.app",
+      "https://e-mithru-frontend.vercel.app"
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
