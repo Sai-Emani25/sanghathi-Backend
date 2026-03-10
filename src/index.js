@@ -1,6 +1,3 @@
-
-
-
 import express, { json } from "express";
 import morgan from "morgan";
 import rateLimit from "express-rate-limit";
@@ -12,9 +9,12 @@ import globalErrorHandler from "./controllers/errorController.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import fs from 'fs';
+
+// CORS middleware - must be at the very top before any routes
 import campubuddyroute from "./routes/CampusBuddy/campusBuddy.js";
 //routes
 import admissionRouter from "./routes/Student/AdmissionRoutes.js";
+import globalSettingsRouter from "./routes/globalSettings.js"; // Only import once at the top
 import userRouter from "./routes/userRoutes.js";
 // import conversationRouter from "./routes/conversationRoutes.js";
 import meetingRouter from "./routes/meetingRoutes.js";
@@ -57,21 +57,20 @@ import uploadRouter from "./routes/uploadRoutes.js";
 import testUploadRouter from "./routes/testUploadRoute.js";
 import projectRoutes from "./routes/Placements/ProjectRoutes.js";
 import feedbackRoutes from "./routes/Feedback/feedbackRoutes.js";
+
+
 import ComplaintRoutes from "./routes/Complain/ComplaintRoutes.js";
+
+const app = express();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const app = express();
-
 // Trust proxy - Add this before other middleware
 app.set('trust proxy', 1);
 
-// Register global settings route after app is initialized
-import globalSettingsRouter from "./routes/globalSettings.js";
-app.use("/api/global-settings", globalSettingsRouter);
 
-//1) GLOBAL MIDDLEWARE
+// 1) GLOBAL MIDDLEWARE
 // Configure CORS to allow requests from local dev and deployed frontend
 app.use(
   cors({
@@ -121,6 +120,7 @@ app.use(mongoSanitize());
 
 // Mount routes
 app.use("/api/ask", campubuddyroute);
+app.use("/api/global-settings", globalSettingsRouter);
 app.use("/api/users", userRouter); // Mount user routes first
 app.use("/api/messages", messageRouter);
 app.use("/api/meetings", meetingRouter);
@@ -164,13 +164,13 @@ app.use("/api/internship", internshipRoutes);
 app.use("/api/v1/upload", uploadRouter);
 app.use("/api/test", testUploadRouter);
 
-app.use("/api/feedback",feedbackRoutes);
+app.use("/api/feedback", feedbackRoutes);
 app.use("/api/complaint", ComplaintRoutes);
 
 // Serve the test HTML file
 app.get('/test-upload', (req, res) => {
   const testHtmlPath = path.join(__dirname, '..', 'test-upload.html');
-  
+
   if (fs.existsSync(testHtmlPath)) {
     res.sendFile(testHtmlPath);
   } else {

@@ -3,8 +3,8 @@ import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cors from "cors";
-import conversationRoutes from "./routes/conversation.js";
-import globalSettingsRouter from "./routes/globalSettings.js";
+import conversationRoutes from "./src/routes/conversationRoutes.js";
+import globalSettingsRouter from "./src/routes/globalSettings.js";
 
 dotenv.config();
 
