@@ -56,6 +56,7 @@ import projectRoutes from "./routes/Placements/ProjectRoutes.js";
 import feedbackRoutes from "./routes/Feedback/feedbackRoutes.js";
 import ComplaintRoutes from "./routes/Complain/ComplaintRoutes.js";
 import MentorFeedbackRoutes from "./routes/FeedbackForm/MentorFeedback/MentorFeedbackRoutes.js";
+import globalSettingsRoutes from "./routes/globalSettingsRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -147,6 +148,7 @@ app.use("/api/placement", placementRoutes);
 app.use("/api/placement/project", projectRoutes);
 app.use("/api/po-attainment", poAttainmentRoutes);
 app.use("/api/tyl-scores", tylScoresRoutes);
+app.use("/api/global-settings", globalSettingsRoutes);
 
 app.use("/api/v1/academics", academicRoutes);
 app.use("/api/internship", internshipRoutes);
